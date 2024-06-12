@@ -1,9 +1,9 @@
-import { Box, Modal, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import CustomTextField from './CustomTextField';
-import DropDownTextField from './DropDownTextField';
-import Button from 'components/Button';
-import { useAddTreeEventMutation } from 'state/api';
+import { Box, Modal, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import CustomTextField from "./CustomTextField";
+import DropDownTextField from "./DropDownTextField";
+import Button from "components/Button";
+import { useAddTreeEventMutation } from "state/api";
 
 const EventCreateModal = ({ openModal, closeModal }) => {
   const getCurrentDate = () => {
@@ -58,37 +58,48 @@ const EventCreateModal = ({ openModal, closeModal }) => {
 
   const handleSave = async () => {
     if (eventIDError || eventNameError) {
-      console.error('Validation error:');
+      console.error("Validation error:");
       return;
     }
 
     const formData = new FormData();
-    formData.append('eventID', eventID);
-    formData.append('eventName', eventName);
-    formData.append('eventDate', eventDate);
-    formData.append('province', province);
-    formData.append('district', district);
-    formData.append('city', city);
-    formData.append('comments', comments);
+    formData.append("eventID", eventID);
+    formData.append("eventName", eventName);
+    formData.append("eventDate", eventDate);
+    formData.append("province", province);
+    formData.append("district", district);
+    formData.append("city", city);
+    formData.append("comments", comments);
     if (coverImage) {
-      formData.append('coverImage', coverImage);
+      formData.append("coverImage", coverImage);
     }
 
     try {
-      await addTreeEvent({ eventDetails: formData }).unwrap();
-      console.log(formData);
-      closeModal();
+      addTreeEvent({
+        eventID,
+        eventName,
+        eventDate,
+        province,
+        district,
+        city,
+        comments,
+        coverImage,
+      }).then((response) => {
+        console.log("Donor added successfully from frontend:", response);
+        closeModal();
+      });
+      // await addTreeEvent({ eventDetails: formData }).unwrap();
+      // console.log(formData);
     } catch (error) {
-      console.error('Error saving event:', error);
+      console.error("Error saving event:", error);
     }
-
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
     if (!allowedTypes.includes(file.type)) {
       setCoverImageError("Only JPEG, PNG, and GIF formats are allowed.");
       setCoverImage(null);
@@ -100,20 +111,27 @@ const EventCreateModal = ({ openModal, closeModal }) => {
   };
 
   return (
-    <Modal open={openModal} onClose={closeModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <Box sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%,-50%)",
-        width: 700,
-        height: 600,
-        bgcolor: "#fff",
-        borderRadius: "20px",
-        boxShadow: 24,
-        p: 4,
-        overflowY: "auto",
-      }}>
+    <Modal
+      open={openModal}
+      onClose={closeModal}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          width: 700,
+          height: 600,
+          bgcolor: "#fff",
+          borderRadius: "20px",
+          boxShadow: 24,
+          p: 4,
+          overflowY: "auto",
+        }}
+      >
         <h2 id="modal-modal-title">Create Event</h2>
         <Box sx={{ mt: 6 }}>
           <CustomTextField
@@ -279,11 +297,16 @@ const EventCreateModal = ({ openModal, closeModal }) => {
           )}
         </Box>
         <Box display="flex" justifyContent="flex-end">
-            <Button type="button" label="Cancel" onClick={closeModal} sx={{ mr: 3 }} />
-            <Box ml={1}>
-              <Button type="button" label="Save" onClick={handleSave} />
-            </Box>
+          <Button
+            type="button"
+            label="Cancel"
+            onClick={closeModal}
+            sx={{ mr: 3 }}
+          />
+          <Box ml={1}>
+            <Button type="button" label="Save" onClick={handleSave} />
           </Box>
+        </Box>
       </Box>
     </Modal>
   );

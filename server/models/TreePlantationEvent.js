@@ -1,42 +1,42 @@
 import mongoose from "mongoose";
 
-const eventSchema= new mongoose.Schema({
-   
-    eventID:{
-        type:String,
-        require:true,
-        unique: true,
-        min:3,
+const treeEventSchema = new mongoose.Schema(
+  {
+    eventID: {
+      type: String,
+      require: true,
+      unique: true,
+      min: 3,
     },
-    eventName:{
-        type:String,
-        require:true,
-        min:2,
-        max:100,
+    eventName: {
+      type: String,
+      require: true,
+      min: 2,
+      max: 100,
     },
-    eventDate:{
-        type:Date,
+    eventDate: {
+      type: Date,
     },
-    province:{
-        type:String,
+    province: {
+      type: String,
     },
-    district:{
-        type:String,
+    district: {
+      type: String,
     },
-    city:{
-        type:String,
+    city: {
+      type: String,
     },
-    comment:{
-        type:String,
-        min:5,
-    }, 
-    avatar:{
-        type:String,
-        default:null
-    }  
-},
-{timestamps:true})
-
-const Events = mongoose.model("Events",eventSchema
+    comment: {
+      type: String,
+      min: 5,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+  },
+  { timestamps: true }
 );
-export default Events;
+
+const TreeEvents = mongoose.model("TreeEvents", treeEventSchema);
+export default TreeEvents;

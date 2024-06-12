@@ -2,16 +2,21 @@ import jwt from "jsonwebtoken";
 import treeEvent from "../models/TreePlantationEvent.js";
 
 export const addTreeEvent = async (req, res) => {
-  console.log("CONTROLLER RUNNING")
-  const { eventDetails } = req.body;
-  const eventID = eventDetails.eventID;
-  const name = eventDetails.eventName;
-  const cover = eventDetails.coverImage;
-  const date = eventDetails.eventDate;
-  const comments = eventDetails.comments;
+  const {
+    eventID,
+    eventName,
+    eventDate,
+    province,
+    district,
+    city,
+    comments,
+    coverImage,
+  } = req.body;
+  console.log("controller running");
   try {
     // Check if the donor already exists
     const existingEventId = await treeEvent.findOne({ eventID });
+    console.log(existingEventId);
 
     // If donor exists, send error response
     if (existingEventId) {
@@ -21,19 +26,26 @@ export const addTreeEvent = async (req, res) => {
     // Create a new donor instance with hashed password
     const newtreeEvent = new treeEvent({
       eventID,
-      name,
-      cover,
-      date,
+      eventName,
+      eventDate,
+      province,
+      district,
+      city,
       comments,
+      coverImage,
     });
 
     // Save the donor to the database
     await newtreeEvent.save();
 
     // Generate JWT token
-    // const token = jwt.sign({ id: newtreeEvent._id }, process.env.JWT_SECRET_KEY, {
-    //   expiresIn: "1h",
-    // });
+    const token = jwt.sign(
+      { id: newtreeEvent._id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
 
     // Send success response with token
     res.status(200).json({ token });

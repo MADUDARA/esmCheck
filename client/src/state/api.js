@@ -96,39 +96,56 @@ export const api = createApi({
     //treeplantationEvent Start
 
     getTreeEvents: build.query({
-      query: () => `events/gets`,
-      providesTags: ["Events"],
+      query: () => `treePlantationEvent/gets`,
+      providesTags: ["TreeEvents"],
     }),
     getTreeEvent: build.query({
-      query: (id) => `events/events/${id}`,
-      providesTags: ["Events"],
+      query: (id) => `treePlantationEvent/events/${id}`,
+      providesTags: ["TreeEvents"],
     }),
     deleteTreeEvent: build.mutation({
-      query: (eventId) => ({ 
-        url: `events/delete/${eventId}`,
+      query: (eventId) => ({
+        url: `treePlantationEvent/delete/${eventId}`,
         method: "Delete",
       }),
-      invalidatesTags: ["Events"], // Invalidate the cache for "Events" after deletion
+      invalidatesTags: ["TreeEvents"], // Invalidate the cache for "Events" after deletion
     }),
     addTreeEvent: build.mutation({
-      query: (eventDetails) => ({
+      query: ({
+        eventID,
+        eventName,
+        eventDate,
+        province,
+        district,
+        city,
+        comments,
+        coverImage,
+      }) => ({
         url: `treePlantationEvent/add`,
         method: "POST",
-        body: eventDetails, // Prepare form data for file upload
+        body: {
+          eventID,
+          eventName,
+          eventDate,
+          province,
+          district,
+          city,
+          comments,
+          coverImage,
+        }, // Prepare form data for file upload
       }),
-      providesTags: ["Events"],
+      providesTags: ["TreeEvents"],
     }),
     updateTreeEvent: build.mutation({
       query: (eventDetails) => ({
-        url: `events/update/${eventDetails.eventId}`,
+        url: `treePlantationEvent/update/${eventDetails.eventId}`,
         method: "PUT",
-        body: {eventDetails}, // Prepare form data for file upload
+        body: { eventDetails }, // Prepare form data for file upload
       }),
-      providesTags: ["Events"],
+      providesTags: ["TreeEvents"],
     }),
 
     //treeplantationEvent End
-
 
     //Items...
 
